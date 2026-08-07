@@ -364,8 +364,8 @@
     },
     {
       "url": "https://vinabrand.vn/cach-can-bang-doi-moi-va-quan-tri-doanh-nghiep-93-8000.html",
-      "status": "RUNNING",
-      "message": "Đang xử lý.",
+      "status": "PENDING",
+      "message": "Tạm dừng trong phiên vì không còn Gmail khả dụng.",
       "updatedAt": "2026-08-07 09:12:35"
     }
   ]
