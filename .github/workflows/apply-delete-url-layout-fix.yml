@@ -1,0 +1,36 @@
+name: Apply delete URL button layout fix
+
+on:
+  push:
+    branches:
+      - fix/delete-url-button-layout
+    paths:
+      - '_he_thong/fix_delete_url_button_layout.ps1'
+      - '.github/workflows/apply-delete-url-layout-fix.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  apply-fix:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: fix/delete-url-button-layout
+
+      - name: Apply layout fix
+        shell: pwsh
+        run: ./_he_thong/fix_delete_url_button_layout.ps1
+
+      - name: Commit updated GUI source
+        shell: pwsh
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- _he_thong/manage_submit_edge_profiles.ps1
+          if (-not (git diff --cached --quiet)) {
+            git commit -m "Place delete URL button in bottom action row"
+            git push origin HEAD:fix/delete-url-button-layout
+          }
