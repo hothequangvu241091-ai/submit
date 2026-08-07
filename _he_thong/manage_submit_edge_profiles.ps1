@@ -1,4 +1,4 @@
-﻿# Quản lý Gmail, tên miền của Gmail và profile được gán.
+# Quản lý Gmail, tên miền của Gmail và profile được gán.
 param([switch]$ValidateOnly)
 
 $ErrorActionPreference = "Stop"
@@ -1287,7 +1287,7 @@ $deleteUrlButton.Cursor = "Hand"
 $urlButtonBar.Controls.Add($deleteUrlButton)
 
 $deleteExternalUrlButton = New-Object System.Windows.Forms.Button
-$deleteExternalUrlButton.Text = "XÓA NHANH TOÀN BỘ URL"
+$deleteExternalUrlButton.Text = "XÓA TOÀN BỘ URL"
 $deleteExternalUrlButton.Size = New-Object System.Drawing.Size(190, 36)
 $deleteExternalUrlButton.BackColor = [System.Drawing.Color]::White
 $deleteExternalUrlButton.ForeColor = $red
@@ -1723,13 +1723,34 @@ function Update-SubmitLayout {
     $quickSubmitPanel.Size = [System.Drawing.Size]::new(246, $listHeight)
     $quickSubmitPanel.Anchor = "Top,Right"
 
-    $autoSubmitButton.Location = [System.Drawing.Point]::new(24, $buttonY)
-    $stopAutoButton.Location = [System.Drawing.Point]::new(194, $buttonY)
-    $stopNowButton.Location = [System.Drawing.Point]::new(372, $buttonY)
-    $addUrlsButton.Location = [System.Drawing.Point]::new(500, $buttonY)
-    $openUrlListButton.Location = [System.Drawing.Point]::new(668, $buttonY)
-    $deleteExternalUrlButton.Location = [System.Drawing.Point]::new(668, $buttonY - 40)
-    $deleteExternalUrlButton.Anchor = "Bottom,Right"
+    # Sáu nút thao tác nằm cùng một hàng, tự co giãn theo chiều rộng cửa sổ.
+    [int]$actionGap = 10
+    [int]$actionAvailableWidth = $panelWidth - 48
+    [int]$actionButtonWidth = [math]::Floor(
+        ($actionAvailableWidth - ($actionGap * 5)) / 6
+    )
+    if ($actionButtonWidth -lt 110) { $actionButtonWidth = 110 }
+
+    $actionButtons = @(
+        $autoSubmitButton,
+        $stopAutoButton,
+        $stopNowButton,
+        $addUrlsButton,
+        $openUrlListButton,
+        $deleteExternalUrlButton
+    )
+    for ($actionIndex = 0; $actionIndex -lt $actionButtons.Count; $actionIndex++) {
+        [int]$actionX = 24 + ($actionIndex * ($actionButtonWidth + $actionGap))
+        $actionButtons[$actionIndex].Location = [System.Drawing.Point]::new(
+            $actionX,
+            $buttonY
+        )
+        $actionButtons[$actionIndex].Size = [System.Drawing.Size]::new(
+            $actionButtonWidth,
+            34
+        )
+        $actionButtons[$actionIndex].Anchor = "Bottom,Left"
+    }
 }
 
 function Set-AutoProgressPanelVisible {
